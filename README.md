@@ -1,35 +1,57 @@
-# Window Fullscreen
+# In-Window Fullscreen
 
-Brave/Chromium MV3 extension that adds a button over videos to expand them to the browser window — not OS fullscreen.
+Brave/Chromium extension that expands videos to **fill the browser window**, without OS-level fullscreen.
 
-Works on same-page `<video>` elements and cross-origin iframe embeds (YouTube, stream hosts, etc.) by running in every frame and expanding the iframe chain via `postMessage`.
+Useful when you want a larger player but still need the tab bar, other monitors, or system UI.
 
-## Install
+## Features
+
+- Works on normal `<video>` elements and cross-origin embeds (YouTube, stream hosts, etc.)
+- Small control on the top-right of the player / embed
+- Exit with the same control or **Escape**
+- YouTube watch pages target `#movie_player` so the picture fills correctly
+
+## Install (Developer Mode)
 
 1. Open `brave://extensions`
-2. Enable Developer mode
-3. Load unpacked → select this folder
-4. On the extension card, set **Site access** to **On all sites** (required for embeds)
-5. Reload any tab you already had open
+2. Enable **Developer mode**
+3. **Load unpacked** → select this folder
+4. On the extension card: **Details** → **Site access** → **On all sites** (needed for embeds)
+5. Reload tabs that were already open
 
-After pulling changes: click **Reload** on the extension card, then reload the page.
+After updating the code: **Reload** the extension, then hard-reload the page.
 
 ## Use
 
-Hover a video or an embedded player iframe. A small button appears at the top-right — click it to expand to the browser window. Click the same button again (exit icon) or press Escape to leave.
+1. Open a page with a video or embedded player
+2. Click the small top-right button on the player
+3. The video fills the browser window
+4. Click the button again (exit icon) or press **Escape**
 
-## Test page
+## Test pages
+
+Manual suite (bare video, CSS `transform` wrapper, same-origin iframe, YouTube embed):
 
 ```bash
 cd test && python -m http.server 8766
 ```
 
-Open `http://localhost:8766/` — covers a bare video, a `transform` wrapper, a same-origin iframe, and a YouTube embed.
+Open `http://localhost:8766/`
 
-Automated self-check (no extension load): from the extension root, `python -m http.server 8767` then open `http://localhost:8767/test/verify.html` — title becomes `VERIFY OK` on success.
+Automated check (loads the content script without installing the extension):
+
+```bash
+python -m http.server 8767
+```
+
+Open `http://localhost:8767/test/verify.html` — the title becomes `VERIFY OK` on success.
 
 ## Limitations
 
-- Videos inside closed shadow roots are not detected.
-- Unusual players may expand only the bare `<video>` (site controls stay behind).
-- Players that ignore `resize` may letterbox until they relayout.
+- Videos inside closed shadow roots are not detected
+- Unusual players may expand only the bare `<video>` (custom chrome stays behind)
+- Players that ignore `resize` may letterbox until they relayout
+
+## License
+
+MIT

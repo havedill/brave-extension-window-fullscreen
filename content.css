@@ -10,13 +10,39 @@
   border: 0 !important;
   background: #000 !important;
   box-sizing: border-box !important;
+  overflow: hidden !important;
 }
 
-.wvfs-expanded video {
+/* Player chrome that YouTube (and similar) keep at the old pixel size. */
+.wvfs-expanded:popover-open .html5-video-player,
+.wvfs-expanded:popover-open .html5-video-container,
+.wvfs-expanded:popover-open #movie_player {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  left: 0 !important;
+  top: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+}
+
+.wvfs-expanded:popover-open .html5-video-container {
+  /* YouTube often leaves this at height:0 with an absolutely positioned video. */
+  position: absolute !important;
+  inset: 0 !important;
+}
+
+.wvfs-expanded:popover-open video {
+  position: absolute !important;
   width: 100% !important;
   height: 100% !important;
   left: 0 !important;
   top: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
   max-width: none !important;
   max-height: none !important;
   object-fit: contain !important;

@@ -16,12 +16,24 @@
   let btnAboveExpanded = false;
 
   function pickContainer(video) {
+    // Prefer real player roots. On YouTube, climbing to #player breaks under popover
+    // (wrapper goes 0×0); #movie_player fills correctly.
+    const known = video.closest(
+      '#movie_player, .html5-video-player, .video-js, .jwplayer, .plyr, [data-player]'
+    );
+    if (known && known !== video) return known;
+
     let el = video;
     const vr = video.getBoundingClientRect();
     if (!vr.width || !vr.height) return video;
     while (el.parentElement && el.parentElement !== document.body && el.parentElement !== document.documentElement) {
       const parent = el.parentElement;
       const pr = parent.getBoundingClientRect();
+      // Skip collapsed wrappers (YouTube's .html5-video-container is often height 0).
+      if (pr.width < 1 || pr.height < 1) {
+        el = parent;
+        continue;
+      }
       if (pr.width > vr.width * 1.25 || pr.height > vr.height * 1.25) break;
       el = parent;
     }

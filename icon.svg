@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="In-Window Fullscreen">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2dd4bf"/>
+      <stop offset="100%" stop-color="#0f766e"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="url(#bg)"/>
+
+  <!-- Browser window -->
+  <rect x="48" y="56" width="160" height="144" rx="16" fill="#ecfdf9" stroke="#115e59" stroke-width="8"/>
+  <rect x="48" y="56" width="160" height="36" rx="16" fill="#99f6e4"/>
+  <rect x="48" y="76" width="160" height="16" fill="#99f6e4"/>
+  <circle cx="72" cy="74" r="6" fill="#115e59"/>
+  <circle cx="92" cy="74" r="6" fill="#115e59"/>
+  <circle cx="112" cy="74" r="6" fill="#115e59"/>
+
+  <!-- Video pane -->
+  <rect x="68" y="108" width="120" height="72" rx="10" fill="#134e4a"/>
+  <path d="M118 128v32l28-16z" fill="#ecfdf9"/>
+
+  <!-- Expand-to-window corners -->
+  <path d="M60 188h28m-28 0v-28" fill="none" stroke="#ecfdf9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M196 188h-28m28 0v-28" fill="none" stroke="#ecfdf9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
