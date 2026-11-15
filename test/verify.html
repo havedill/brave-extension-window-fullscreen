@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Window Fullscreen — automated verify</title>
+  <link rel="stylesheet" href="../content.css" />
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; background: #111; color: #eee; }
+    video { width: 480px; height: 270px; background: #000; display: block; }
+    #log { white-space: pre-wrap; margin-top: 1rem; font-family: ui-monospace, monospace; font-size: 13px; }
+    .ok { color: #6f6; }
+    .fail { color: #f66; }
+  </style>
+</head>
+<body>
+  <video id="v" controls playsinline
+    src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4">
+  </video>
+  <div id="log"></div>
+  <script src="../content.js"></script>
+  <script>
+    const log = document.getElementById('log');
+    const lines = [];
+    function say(ok, msg) {
+      lines.push((ok ? 'OK  ' : 'FAIL') + '  ' + msg);
+      log.innerHTML = lines.map((l) =>
+        `<div class="${l.startsWith('OK') ? 'ok' : 'fail'}">${l}</div>`
+      ).join('');
+    }
+
+    (async () => {
+      const v = document.getElementById('v');
+      await new Promise((r) => {
+        if (v.readyState >= 2) return r();
+        v.addEventListener('loadeddata', r, { once: true });
+        setTimeout(r, 3000);
+      });
+
+      // Simulate hover so the button mounts.
+      v.dispatchEvent(new PointerEvent('pointermove', {
+        clientX: v.getBoundingClientRect().left + 10,
+        clientY: v.getBoundingClientRect().top + 10,
+        bubbles: true,
+      }));
+      document.dispatchEvent(new PointerEvent('pointermove', {
+        clientX: v.getBoundingClientRect().left + 40,
+        clientY: v.getBoundingClientRect().top + 40,
+        bubbles: true,
+      }));
+
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+      const host = document.getElementById('wvfs-btn-host');
+      say(!!host, 'button host created on hover');
+      if (!host) return;
+
+      const btn = host.shadowRoot && host.shadowRoot.querySelector('button');
+      say(!!btn, 'shadow button present');
+      if (!btn) return;
+
+      btn.click();
+      await new Promise((r) => requestAnimationFrame(r));
+
+      const expanded = document.querySelector('.wvfs-expanded');
+      say(!!expanded, 'element has wvfs-expanded after click');
+      say(expanded && expanded.matches(':popover-open'), 'expanded element is :popover-open (top layer)');
+
+      const r = expanded && expanded.getBoundingClientRect();
+      say(!!r && r.width >= window.innerWidth * 0.95 && r.height >= window.innerHeight * 0.95,
+        `expanded size ~viewport (${r && Math.round(r.width)}x${Math.round(r.height)} vs ${window.innerWidth}x${window.innerHeight})`);
+
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      await new Promise((r) => requestAnimationFrame(r));
+
+      say(!document.querySelector('.wvfs-expanded'), 'Escape cleared wvfs-expanded');
+      say(!document.querySelector('[popover].wvfs-expanded'), 'popover attribute removed on exit');
+
+      const failed = lines.some((l) => l.startsWith('FAIL'));
+      document.title = failed ? 'VERIFY FAIL' : 'VERIFY OK';
+      say(!failed, failed ? 'done with failures' : 'all checks passed');
+    })();
+  </script>
+</body>
+</html>

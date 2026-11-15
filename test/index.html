@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Window Fullscreen — test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Georgia, "Times New Roman", serif;
+      background: linear-gradient(160deg, #1a2332 0%, #0d1218 100%);
+      color: #e8e4dc;
+      line-height: 1.4;
+    }
+    h1 { font-size: 1.5rem; font-weight: 600; margin: 0 0 0.25rem; }
+    p { margin: 0 0 1.5rem; opacity: 0.75; max-width: 40rem; }
+    section {
+      margin-bottom: 2.5rem;
+    }
+    h2 { font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem; letter-spacing: 0.02em; }
+    video {
+      width: 640px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      background: #000;
+    }
+    .transformed {
+      transform: scale(1);
+      width: 640px;
+      max-width: 100%;
+      border: 1px solid #334;
+    }
+    .transformed video { width: 100%; }
+    iframe {
+      width: 640px;
+      max-width: 100%;
+      height: 360px;
+      border: 0;
+      display: block;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Window Fullscreen test</h1>
+  <p>Hover each video and use the top-right button. Escape exits. The transform case must still fill the browser window (not the transformed ancestor).</p>
+
+  <section>
+    <h2>1. Bare video</h2>
+    <video controls playsinline
+      src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4">
+    </video>
+  </section>
+
+  <section>
+    <h2>2. Inside transform: scale(1) wrapper</h2>
+    <div class="transformed">
+      <video controls playsinline
+        src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4">
+      </video>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. Same-origin iframe</h2>
+    <iframe src="frame.html" title="Same-origin video frame"></iframe>
+  </section>
+
+  <section>
+    <h2>4. YouTube embed</h2>
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ"
+      title="YouTube embed"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </section>
+</body>
+</html>
